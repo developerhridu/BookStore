@@ -5,14 +5,24 @@
   <title>Title</title>
 </head>
 <body>
-<h1>Task Page </h1>
 <script>
   // Check if the user is authenticated
-  if (!localStorage.getItem('authenticatedUser')) {
+  if (!sessionStorage.getItem('authenticatedUser')) {
     // Redirect to the login page if not authenticated
     window.location.href = 'login.html';
   }
 </script>
 <h2>Create Task</h2>
+<button type="button" onclick="logout()">Logout</button>
+
+<script>
+  function logout() {
+    // Remove the authenticated user from session storage
+    sessionStorage.removeItem('authenticatedUser');
+
+    // Redirect to the login page
+    window.location.href = 'login.html';
+  }
+</script>
 </body>
 </html>
