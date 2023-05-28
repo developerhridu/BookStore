@@ -19,6 +19,7 @@
         <div class="form-group">
             <label for="email">Email:</label>
             <input type="email" class="form-control" id="email" required>
+            <small id="emailError" class="form-text text-danger"></small>
         </div>
         <div class="form-group">
             <label for="password">Password:</label>
@@ -44,6 +45,16 @@
             alert('Please fill in all fields.');
             return;
         }
+
+        // Validate email format using regex
+        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            document.getElementById('emailError').textContent = 'Invalid email format.';
+            return;
+        }
+
+        // Clear any previous error message
+        document.getElementById('emailError').textContent = '';
 
         // Create user object
         let user = {
