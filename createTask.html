@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<h1>Task Page </h1>
+<script>
+  // Check if the user is authenticated
+  if (!localStorage.getItem('authenticatedUser')) {
+    // Redirect to the login page if not authenticated
+    window.location.href = 'login.html';
+  }
+</script>
+<h2>Create Task</h2>
+</body>
+</html>
