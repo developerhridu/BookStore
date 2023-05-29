@@ -39,10 +39,128 @@
     </div>
 </nav>
 
-<!-- Showing Tasks -->
+<!-- Table to display tasks -->
+<div class="container mt-5 col-xl-11">
+    <h1>All Tasks</h1>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Task Name</th>
+            <th>Task Category</th>
+            <th>Task Status</th>
+            <th>Task Description</th>
+            <th>Responsible Person</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody id="taskTableBody">
+        <!-- Table rows will be dynamically added here -->
+        </tbody>
+    </table>
+</div>
 
 
 <script>
+    // Retrieve tasks from local storage
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+    // Function to populate the table with task data
+    function populateTable() {
+        const tableBody = document.getElementById('taskTableBody');
+        tableBody.innerHTML = '';
+
+        tasks.forEach(task => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${task.taskName}</td>
+                <td>${task.taskCategory}</td>
+                <td>${task.taskStatus}</td>
+                <td>${task.taskDescription}</td>
+                <td>${task.responsiblePerson}</td>
+                <td>${task.startDate}</td>
+                <td>${task.endDate}</td>
+                <td>
+                    <button class="btn btn-primary btn-sm" onclick="editTask('${task.id}')">
+                        <i class="fas fa-edit">Edit</i>
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-danger btn-sm" onclick="deleteTask('${task.id}')">
+                        <i class="fas fa-trash">Delete</i>
+                    </button>
+                </td>
+            `;
+
+            tableBody.appendChild(row);
+        });
+    }
+
+    function editTask(taskId) {
+        // Find the task with the matching ID
+        const task = tasks.find(t => t.id === taskId);
+
+        if (task) {
+            // Redirect the user to the createTask page and auto-fill existing data
+            const editUrl = `createTask.html?taskId=${taskId}`;
+            window.location.href = editUrl;
+        }
+    }
+
+    // Retrieve the task ID from the URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const taskId = urlParams.get('taskId');
+
+    // Function to populate task details in the form
+    function populateTaskDetails() {
+        // Find the task with the matching ID
+        const task = tasks.find(t => t.id === taskId);
+
+        if (task) {
+            // Fill the form fields with task details
+            document.getElementById('taskName').value = task.taskName;
+
+            // Check the checkboxes based on task category
+            const taskCategories = task.taskCategory.split(',');
+            taskCategories.forEach(category => {
+                document.getElementById(category).checked = true;
+            });
+
+            // Select the radio button based on task status
+            document.getElementById(task.taskStatus).checked = true;
+
+            document.getElementById('taskDescription').value = task.taskDescription;
+            document.getElementById('responsiblePerson').value = task.responsiblePerson;
+            document.getElementById('startDate').value = task.startDate;
+            document.getElementById('endDate').value = task.endDate;
+        }
+    }
+
+    // Call the populateTaskDetails function when the page is loaded
+    window.addEventListener('load', populateTaskDetails);
+
+
+    // Function to handle the delete button functionality
+    function deleteTask(taskId) {
+        // Find the task index with the matching ID
+        const taskIndex = tasks.findIndex(t => t.id === taskId);
+
+        if (taskIndex !== -1) {
+            // Remove the task from the array
+            tasks.splice(taskIndex, 1);
+
+            // Update tasks in local storage
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+
+            // Repopulate the table
+            populateTable();
+        }
+    }
+
+    // Initial population of the table
+    populateTable();
 
 </script>
 </body>
