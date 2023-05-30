@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Create Task</title>
+  <title>Update Task</title>
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
@@ -39,7 +39,7 @@
 
 <!-- Creating Tasks -->
 <div class="container mt-5">
-  <h1>Add ToDo</h1>
+  <h1>Update ToDo</h1>
   <form id="createTaskForm">
     <div class="form-group">
       <label for="taskName">Task Name:</label>
@@ -58,6 +58,18 @@
       <div class="form-check">
         <input type="checkbox" class="form-check-input" id="academic" name="taskCategory" value="Academic">
         <label class="form-check-label" for="academic">Academic</label>
+      </div>
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="errandsShopping" name="taskCategory" value="Errands and shopping">
+        <label class="form-check-label" for="errandsShopping">Errands and shopping</label>
+      </div>
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="business" name="taskCategory" value="Business">
+        <label class="form-check-label" for="business">Business</label>
+      </div>
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="healthWellness" name="taskCategory" value="Health and wellness">
+        <label class="form-check-label" for="healthWellness">Health and wellness</label>
       </div>
     </div>
     <div class="form-group">
@@ -95,9 +107,7 @@
       <label for="endDate">End Date:</label>
       <input type="date" class="form-control" id="endDate">
     </div>
-    <button type="submit" class="btn btn-primary" id="submitButton" >Submit</button>
-    <button type="button" class="btn btn-primary" id="updateButton" style="display: none;">Update</button>
-
+    <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 </div>
 
@@ -118,8 +128,21 @@
       alert('Please log in to create a task.');
       return;
     }
+    // Add form submit event listener
+    document.getElementById('createTaskForm').addEventListener('submit', handleSubmit);
 
+    // Function to retrieve the URL parameter value
+    function getURLParameter(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
+
+    // Function to decode URL parameter values
+    function decodeURLParameter(value) {
+      return decodeURIComponent(value);
+    }
     // Retrieve form values
+    const taskId = getURLParameter('taskId'); // Get the task ID from URL parameter
     const taskName = document.getElementById('taskName').value;
     const taskCategory = Array.from(document.querySelectorAll('input[name="taskCategory"]:checked')).map(checkbox => checkbox.value);
     const taskStatus = document.querySelector('input[name="taskStatus"]:checked').value;
@@ -130,7 +153,7 @@
 
     // Create new task object with unique ID and authenticated user ID
     const task = {
-      id: generateID(),
+      id: taskId || generateID(), // Use the existing task ID if available, otherwise generate a new ID
       authenticatedUserId,
       taskName,
       taskCategory,
@@ -144,18 +167,27 @@
     // Retrieve existing tasks from local storage or initialize an empty array
     const existingTasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
-    // Add the new task to the existing tasks array
-    existingTasks.push(task);
+    // Check if the task ID exists in the existing tasks array
+    const existingTaskIndex = existingTasks.findIndex(existingTask => existingTask.id === taskId);
+
+    if (existingTaskIndex > -1) {
+      // Update the existing task
+      existingTasks[existingTaskIndex] = task;
+      alert('Task updated successfully!');
+    } else {
+      // Add the new task to the existing tasks array
+      existingTasks.push(task);
+      alert('Task created successfully!');
+    }
 
     // Store the updated tasks array in local storage
     localStorage.setItem('tasks', JSON.stringify(existingTasks));
 
     // Reset the form
     document.getElementById('createTaskForm').reset();
-
-    // Show success message or perform any other action
-    alert('Task created successfully!');
   }
+
+  document.getElementById('updateButton').addEventListener('click', handleSubmit);
 
 
   // Add form submit event listener
@@ -203,8 +235,7 @@
   }
 
   // Call the populateTaskDetails function when the page is loaded
-    window.addEventListener('load', populateTaskDetails);
-  document.getElementById('updateButton').addEventListener('click', handleSubmit);
+  window.addEventListener('load', populateTaskDetails);
 
 </script>
 <script src="/js/common/logout.js"></script>
