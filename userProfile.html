@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>User Profile</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="home.html">
+        <img src="/img/todo.png" width="30" height="30" class="d-inline-block align-top" alt="Add Task Icon">
+        ToDo App
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="home.html">All List</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="createTask.html">Add ToDo</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="userProfile.html">User Profile</a>
+            </li>
+        </ul>
+
+        <!-- Logout button -->
+        <button class="btn btn-primary" onclick="logout()">Logout</button>
+    </div>
+</nav>
+<script>
+    // Logout function
+    function logout() {
+        // Clear the authenticated user ID from local storage
+        localStorage.removeItem('authenticatedUserId');
+
+        // Redirect to the login page
+        window.location.href = 'login.html';
+    }
+</script>
+
+
+<div class="container mt-5 col-xl-6">
+    <h1>User Profile</h1>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+        </tr>
+        </thead>
+        <tbody id="userProfileTable"></tbody>
+    </table>
+</div>
+
+<script>
+    // Retrieve authenticated user ID from local storage
+    var authenticatedUserId = localStorage.getItem('authenticatedUserId');
+
+    // Get users from local storage
+    var users = JSON.parse(localStorage.getItem('users'));
+
+    // Find the authenticated user by ID
+    var authenticatedUser = users.find(function(user) {
+        return user.id === authenticatedUserId;
+    });
+
+    // Display user information dynamically in a table
+    var userProfileTable = document.getElementById('userProfileTable');
+    userProfileTable.innerHTML = `
+        <tr>
+            <td>${authenticatedUser.firstName}</td>
+            <td>${authenticatedUser.lastName}</td>
+            <td>${authenticatedUser.email}</td>
+        </tr>
+    `;
+</script>
+</body>
+</html>

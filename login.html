@@ -66,8 +66,8 @@
             return;
         }
 
-        // Store the authenticated user ID in session storage
-        sessionStorage.setItem('authenticatedUserId', user.id);
+        // Store the authenticated user ID in local storage
+        localStorage.setItem('authenticatedUserId', user.id);
 
         // Redirect to home page
         window.location.href = 'home.html';

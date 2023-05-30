@@ -10,7 +10,7 @@
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">
+  <a class="navbar-brand" href="home.html">
     <img src="/img/todo.png" width="30" height="30" class="d-inline-block align-top" alt="Add Task Icon">
     ToDo App
   </a>
@@ -26,16 +26,28 @@
       <li class="nav-item">
         <a class="nav-link active" href="createTask.html">Add ToDo</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="userProfile.html">User Profile</a>
+      </li>
     </ul>
-    <form class="form-inline">
-      <div class="ml-3">
-        <a class="nav-link" href="#">
-          <img src="/img/profile.png" width="30" height="30" class="d-inline-block align-top" alt="Profile Icon">
-        </a>
-      </div>
-    </form>
+
+    <!-- Logout button -->
+    <button class="btn btn-primary" onclick="logout()">Logout</button>
   </div>
 </nav>
+
+
+<script>
+  // Logout function
+  function logout() {
+    // Clear the authenticated user ID from local storage
+    localStorage.removeItem('authenticatedUserId');
+
+    // Redirect to the login page
+    window.location.href = 'login.html';
+  }
+</script>
+
 
 <!-- Creating Tasks -->
 <div class="container mt-5">
@@ -117,9 +129,17 @@
     return '_' + Math.random().toString(36).substr(2, 9);
   }
 
-  // Function to handle form submission
   function handleSubmit(event) {
     event.preventDefault();
+
+    // Retrieve authenticated user ID from local storage
+    const authenticatedUserId = localStorage.getItem('authenticatedUserId');
+
+    // Return if authenticated user ID is not available
+    if (!authenticatedUserId) {
+      alert('Please log in to create a task.');
+      return;
+    }
 
     // Retrieve form values
     const taskName = document.getElementById('taskName').value;
@@ -130,9 +150,10 @@
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
 
-    // Create new task object with unique ID
+    // Create new task object with unique ID and authenticated user ID
     const task = {
       id: generateID(),
+      authenticatedUserId,
       taskName,
       taskCategory,
       taskStatus,
@@ -158,8 +179,55 @@
     alert('Task created successfully!');
   }
 
+
   // Add form submit event listener
   document.getElementById('createTaskForm').addEventListener('submit', handleSubmit);
+
+  // Function to retrieve the URL parameter value
+  function getURLParameter(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+  }
+
+  // Function to decode URL parameter values
+  function decodeURLParameter(value) {
+    return decodeURIComponent(value);
+  }
+
+  function populateTaskDetails() {
+    // Retrieve task details from URL parameters
+    const taskId = getURLParameter('taskId');
+    const taskName = decodeURLParameter(getURLParameter('taskName'));
+    const taskCategory = decodeURLParameter(getURLParameter('taskCategory'));
+    const taskStatus = decodeURLParameter(getURLParameter('taskStatus'));
+    const taskDescription = decodeURLParameter(getURLParameter('taskDescription'));
+    const responsiblePerson = decodeURLParameter(getURLParameter('responsiblePerson'));
+    const startDate = decodeURLParameter(getURLParameter('startDate'));
+    const endDate = decodeURLParameter(getURLParameter('endDate'));
+
+    // Fill the form fields with task details
+    document.getElementById('taskName').value = taskName;
+    // document.getElementById('taskCategory').value = taskCategory;
+    // document.getElementById('taskDescription').value = taskDescription;
+
+    // Check the checkboxes based on task category
+    // const taskCategories = taskCategory.split(',');
+    // taskCategories.forEach(category => {
+    //   document.getElementById(category).checked = true;
+    // });
+    //
+    // // Select the radio button based on task status
+    // document.getElementById(taskStatus).checked = true;
+
+    document.getElementById('taskDescription').value = taskDescription;
+    document.getElementById('responsiblePerson').value = responsiblePerson;
+    // document.getElementById('startDate').value = startDate;
+    // document.getElementById('endDate').value = endDate;
+  }
+
+  // Call the populateTaskDetails function when the page is loaded
+  window.addEventListener('load', populateTaskDetails);
+
 </script>
 </body>
 </html>

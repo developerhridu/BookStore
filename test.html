@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Task Management</title>
+  <style>
+    .completed {
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+<h2>Task List</h2>
+<ul id="taskList">
+  <li>
+    <input type="text" class="taskInput">
+    <button class="addSubtaskBtn">Add Subtask</button>
+    <ul class="subtaskList">
+      <!-- Subtasks will be dynamically added here -->
+    </ul>
+  </li>
+</ul>
+
+<script>
+  var addSubtaskBtns = document.querySelectorAll('.addSubtaskBtn');
+
+  addSubtaskBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var parentLi = this.parentNode;
+      var subtaskList = parentLi.querySelector('.subtaskList');
+
+      var subtaskInput = prompt('Enter subtask name:');
+      if (subtaskInput) {
+        var subtaskLi = document.createElement('li');
+        var subtaskCheckbox = document.createElement('input');
+        subtaskCheckbox.type = 'checkbox';
+
+        var subtaskLabel = document.createElement('label');
+        subtaskLabel.textContent = subtaskInput;
+
+        subtaskLi.appendChild(subtaskCheckbox);
+        subtaskLi.appendChild(subtaskLabel);
+        subtaskList.appendChild(subtaskLi);
+      }
+    });
+  });
+</script>
+</body>
+</html>
