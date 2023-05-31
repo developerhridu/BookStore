@@ -44,7 +44,7 @@ function editTask(taskId) {
 
     if (task) {
         // Redirect the user to the createTask page and pass the task data as URL parameters
-        const editUrl = `createTask.html?taskId=${taskId}&taskName=${encodeURIComponent(task.taskName)}&taskCategory=${encodeURIComponent(task.taskCategory)}&taskStatus=${encodeURIComponent(task.taskStatus)}&taskDescription=${encodeURIComponent(task.taskDescription)}&responsiblePerson=${encodeURIComponent(task.responsiblePerson)}&startDate=${encodeURIComponent(task.startDate)}&endDate=${encodeURIComponent(task.endDate)}`;
+        const editUrl = `updateTask.html?taskId=${taskId}&taskName=${encodeURIComponent(task.taskName)}&taskCategory=${encodeURIComponent(task.taskCategory)}&taskStatus=${encodeURIComponent(task.taskStatus)}&taskDescription=${encodeURIComponent(task.taskDescription)}&responsiblePerson=${encodeURIComponent(task.responsiblePerson)}&startDate=${encodeURIComponent(task.startDate)}&endDate=${encodeURIComponent(task.endDate)}`;
         window.location.href = editUrl;
     }
 }
@@ -60,31 +60,6 @@ const taskDescriptionParam = urlParams.get('taskDescription');
 const responsiblePersonParam = urlParams.get('responsiblePerson');
 const startDateParam = urlParams.get('startDate');
 const endDateParam = urlParams.get('endDate');
-
-// Function to populate task details in the form
-// function populateTaskDetails() {
-//     // Fill the form fields with task details from the URL parameters
-//     document.getElementById('taskName').value = taskNameParam;
-//
-//     // Check the checkboxes based on task category
-//     const taskCategories = taskCategoryParam.split(',');
-//     taskCategories.forEach(category => {
-//         document.getElementById(category).checked = true;
-//     });
-//
-//     // Select the radio button based on task status
-//     document.getElementById(taskStatusParam).checked = true;
-//
-//     document.getElementById('taskDescription').value = taskDescriptionParam;
-//     document.getElementById('responsiblePerson').value = responsiblePersonParam;
-//     document.getElementById('startDate').value = startDateParam;
-//     document.getElementById('endDate').value = endDateParam;
-// }
-//
-//
-//
-// // Call the populateTaskDetails function when the page is loaded
-//     window.addEventListener('load', populateTaskDetails);
 
 
 // Function to handle the delete button functionality

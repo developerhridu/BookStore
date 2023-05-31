@@ -57,47 +57,4 @@ function handleSubmit(event) {
 // Add form submit event listener
 document.getElementById('createTaskForm').addEventListener('submit', handleSubmit);
 
-// Function to retrieve the URL parameter value
-function getURLParameter(name) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(name);
-}
 
-// Function to decode URL parameter values
-function decodeURLParameter(value) {
-    return decodeURIComponent(value);
-}
-
-function populateTaskDetails() {
-    // Retrieve task details from URL parameters
-    const taskId = getURLParameter('taskId');
-    const taskName = decodeURLParameter(getURLParameter('taskName'));
-    const taskCategory = decodeURLParameter(getURLParameter('taskCategory'));
-    const taskStatus = decodeURLParameter(getURLParameter('taskStatus'));
-    const taskDescription = decodeURLParameter(getURLParameter('taskDescription'));
-    const responsiblePerson = decodeURLParameter(getURLParameter('responsiblePerson'));
-    const startDate = decodeURLParameter(getURLParameter('startDate'));
-    const endDate = decodeURLParameter(getURLParameter('endDate'));
-
-    // Fill the form fields with task details
-    document.getElementById('taskName').value = taskName;
-
-
-    // Check the checkboxes based on task category
-    // const taskCategories = taskCategory.split(',');
-    // taskCategories.forEach(category => {
-    //   document.getElementById(taskCategory).checked = true;
-    // });
-
-    // Select the radio button based on task status
-    // document.getElementById(taskStatus).checked = true;
-
-    document.getElementById('taskDescription').value = taskDescription;
-    document.getElementById('responsiblePerson').value = responsiblePerson;
-    // document.getElementById('startDate').value = startDate;
-    // document.getElementById('endDate').value = endDate;
-}
-
-// Call the populateTaskDetails function when the page is loaded
-window.addEventListener('load', populateTaskDetails);
-document.getElementById('updateButton').addEventListener('click', handleSubmit);
