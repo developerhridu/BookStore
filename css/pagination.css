@@ -4,18 +4,19 @@
 
 .pagination li {
     display: inline-block;
-    margin-right: 5px;
+    margin: 0 2px;
 }
 
-.pagination li a {
+.pagination a {
+    display: block;
     padding: 5px 10px;
+    border: 1px solid #ccc;
     text-decoration: none;
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
     color: #333;
 }
 
-.pagination li a.active {
+.pagination a.active {
     background-color: #007bff;
     color: #fff;
+    border-color: #007bff;
 }

@@ -142,7 +142,7 @@ function showList(searchItem) {
 }
 
 function handleSearch(event) {
-    event.preventDefault(); // Prevent form submission
+    event.preventDefault();
 
     // Retrieve search criteria from form inputs
     let searchItem = {};
@@ -150,15 +150,11 @@ function handleSearch(event) {
     const workRelatedCheckbox = document.querySelector('#workRelated');
     const personalCheckbox = document.querySelector('#personal');
     const academicCheckbox = document.querySelector('#academic');
-
-// Check if the checkboxes are checked and assign their values to variables
     const workRelated = workRelatedCheckbox.checked ? workRelatedCheckbox.value : null;
     const personal = personalCheckbox.checked ? personalCheckbox.value : null;
     const academic = academicCheckbox.checked ? academicCheckbox.value : null;
-
     const taskStatusInput = document.querySelector('input[name="taskStatus"]:checked');
     const taskStatusSearch = taskStatusInput ? taskStatusInput.value : '';
-
     const responsiblePersonSearch = document.getElementById('responsiblePersonSearch').value;
     const endDateSearch = document.getElementById('endDateSearch').value;
 
@@ -184,11 +180,40 @@ function handleSearch(event) {
 document.getElementById('searchForm').addEventListener('submit', handleSearch);
 
 
+
 function generatePagination(totalPages, currentPage) {
+    // Setting up variables and clearing the pagination container
     const paginationContainer = document.getElementById('pagination');
     paginationContainer.innerHTML = '';
 
-    for (let i = 1; i <= totalPages; i++) {
+    const maxVisiblePages = 3;
+    // Calculating start and end page
+    let startPage = Math.max(currentPage - Math.floor(maxVisiblePages / 2), 1);
+    let endPage = Math.min(startPage + maxVisiblePages - 1, totalPages);
+
+    if (endPage - startPage + 1 < maxVisiblePages) {
+        startPage = Math.max(endPage - maxVisiblePages + 1, 1);
+    }
+    // Adding ellipsis or first page link if necessary
+    if (startPage > 1) {
+        const li = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = '#';
+        link.innerText = '1';
+        link.addEventListener('click', () => {
+            handlePageChange(1);
+        });
+        li.appendChild(link);
+        paginationContainer.appendChild(li);
+
+        if (startPage > 2) {
+            const span = document.createElement('span');
+            span.innerText = '.....';
+            paginationContainer.appendChild(span);
+        }
+    }
+    // Generating the page links within the visible range
+    for (let i = startPage; i <= endPage; i++) {
         const li = document.createElement('li');
         const link = document.createElement('a');
         link.href = '#';
@@ -200,6 +225,24 @@ function generatePagination(totalPages, currentPage) {
         li.appendChild(link);
         paginationContainer.appendChild(li);
     }
+
+    if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+            const span = document.createElement('span');
+            span.innerText = '.....';
+            paginationContainer.appendChild(span);
+        }
+
+        const li = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = '#';
+        link.innerText = totalPages;
+        link.addEventListener('click', () => {
+            handlePageChange(totalPages);
+        });
+        li.appendChild(link);
+        paginationContainer.appendChild(li);
+    }
 }
 
 
@@ -207,7 +250,9 @@ function generatePagination(totalPages, currentPage) {
 function handlePageChange(pageNumber) {
     currentPage = pageNumber;
     const startIndex = (currentPage - 1) * itemsPerPage;
+    // debugger
     const endIndex = startIndex + itemsPerPage;
+    // debugger
 
     if (filteredTasks.length > 0) {
         const tasksToDisplay = filteredTasks.slice(startIndex, endIndex);
@@ -221,10 +266,9 @@ function handlePageChange(pageNumber) {
 }
 
 
-const itemsPerPage = 5; // Number of tasks to display per page
-let totalPages = Math.ceil(tasks.length / itemsPerPage); // Total number of pages for all tasks
-let totalFilteredPages = Math.ceil(filteredTasks.length / itemsPerPage); // Total number of pages for filtered tasks
+const itemsPerPage = 2;
+let totalPages = Math.ceil(tasks.length / itemsPerPage);
+let totalFilteredPages = Math.ceil(filteredTasks.length / itemsPerPage);
 let currentPage = 1; // Current page
 
-// Initial population of the table and pagination
 handlePageChange(currentPage);
