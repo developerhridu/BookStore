@@ -2,39 +2,41 @@
 // Retrieve tasks from local storage
 const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
+
 // Function to Display Task Table
-function populateTable(filteredTasks) {
+function populateTable(TasksList) {
     const tableBody = document.getElementById('taskTableBody');
     tableBody.innerHTML = '';
 
     // Retrieve authenticated user ID from local storage
     const authenticatedUserId = localStorage.getItem('authenticatedUserId');
 
-    const tasksToDisplay = filteredTasks || tasks; // Use filteredTasks if available, otherwise use all tasks
+    const tasksToDisplay = TasksList || tasks; // Use filteredTasks if available, otherwise use all tasks
 
     tasksToDisplay.forEach(task => {
         // Check if the task belongs to the authenticated user
         if (task.authenticatedUserId === authenticatedUserId) {
             const row = document.createElement('tr');
             row.innerHTML = `
-        <td>${task.taskName}</td>
-        <td>${task.taskCategory}</td>
-        <td>${task.taskStatus}</td>
-        <td>${task.taskDescription}</td>
-        <td>${task.responsiblePerson}</td>
-        <td>${task.startDate}</td>
-        <td>${task.endDate}</td>
-        <td>
-          <button class="btn btn-primary btn-sm" onclick="editTask('${task.id}')">
-            <i class="fas fa-edit">Edit</i>
-          </button>
-        </td>
-        <td>
-          <button class="btn btn-danger btn-sm" onclick="deleteTask('${task.id}')">
-            <i class="fas fa-trash">Delete</i>
-          </button>
-        </td>
-      `;
+                <td><input type="checkbox" value="${task.id}" /></td>
+                <td>${task.taskName}</td>
+                <td>${task.taskCategory}</td>
+                <td>${task.taskStatus}</td>
+                <td>${task.taskDescription}</td>
+                <td>${task.responsiblePerson}</td>
+                <td>${task.startDate}</td>
+                <td>${task.endDate}</td>
+                <td>
+                    <button class="btn btn-primary btn-sm" onclick="editTask('${task.id}')">
+                        <i class="fas fa-edit"></i>Edit
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-danger btn-sm" onclick="deleteTask('${task.id}')">
+                        <i class="fas fa-trash"></i>Delete
+                    </button>
+                </td>
+            `;
 
             tableBody.appendChild(row);
         }
@@ -77,6 +79,43 @@ function deleteTask(taskId) {
     }
 }
 
+
+
+function deleteSelectedTasks() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+    const taskIdsToDelete = Array.from(checkboxes).map(checkbox => checkbox.value);
+
+    if (taskIdsToDelete.length === 0) {
+        alert('Please select at least one task to delete.');
+        return;
+    }
+
+    const confirmDelete = confirm('Are you sure you want to delete the selected tasks?');
+
+    if (!confirmDelete) {
+        return;
+    }
+
+    // Retrieve existing tasks from local storage
+    const existingTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+    // Filter tasks to exclude the selected ones
+    const updatedTasks = existingTasks.filter(task => !taskIdsToDelete.includes(task.id));
+
+    // Store the updated tasks array in local storage
+    localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+
+    // Redirect to the home page or perform any other desired action
+    window.location.href = 'home.html';
+}
+function toggleAllTasks() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const selectAllCheckbox = document.getElementById('selectAllTasks');
+
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = selectAllCheckbox.checked;
+    });
+}
 
 // Initial population of the table
 populateTable();

@@ -107,6 +107,9 @@
     <table class="table table-striped">
         <thead class="thead-dark">
         <tr>
+            <th>
+                <input type="checkbox" id="selectAllTasks" onchange="toggleAllTasks()">
+            </th>
             <th>Task Name</th>
             <th>Task Category</th>
             <th>Task Status</th>
@@ -121,8 +124,13 @@
         <tbody id="taskTableBody">
         </tbody>
     </table>
+        <button class="btn btn-danger btn-sm" onclick="deleteSelectedTasks()">
+            Delete Selected
+        </button>
     <ul class="pagination justify-content-center" id="pagination"></ul>
 </div>
+
+
 
 
 
