@@ -34,8 +34,12 @@ document.getElementById('registrationForm').addEventListener('submit', function(
     }
 
     // Create user object
+    function generateID() {
+        return 'user_' + Math.random().toString(36).substr(2, 9);
+    }
+
     let user = {
-        id: 'user_' + Date.now(), // Generate a unique ID for the user
+        id: generateID(),
         firstName: firstName,
         lastName: lastName,
         email: email,
