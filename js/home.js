@@ -305,7 +305,7 @@ function handlePageChange(pageNumber) {
 }
 
 
-const itemsPerPage = 2;
+const itemsPerPage = 5;
 let totalPages = Math.ceil(tasks.length / itemsPerPage);
 let totalFilteredPages = Math.ceil(filteredTasks.length / itemsPerPage);
 let currentPage = 1; // Current page

@@ -30,55 +30,6 @@
     </form>
 </div>
 
-<script>
-    document.getElementById('registrationForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent form submission
-
-        // Get input values
-        let firstName = document.getElementById('firstName').value;
-        let lastName = document.getElementById('lastName').value;
-        let email = document.getElementById('email').value;
-        let password = document.getElementById('password').value;
-
-        // Validate form fields
-        if (!firstName || !lastName || !email || !password) {
-            alert('Please fill in all fields.');
-            return;
-        }
-
-        // Validate email format using regex
-        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            document.getElementById('emailError').textContent = 'Invalid email format.';
-            return;
-        }
-
-        // Clear any previous error message
-        document.getElementById('emailError').textContent = '';
-
-        // Create user object
-        let user = {
-            id: 'user_' + Date.now(), // Generate a unique ID for the user
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            password: password
-        };
-
-        // Get existing users from local storage or initialize an empty array
-        let users = JSON.parse(localStorage.getItem('users')) || [];
-
-        // Add new user to the array
-        users.push(user);
-
-        // Store updated user array in local storage
-        localStorage.setItem('users', JSON.stringify(users));
-
-        // Reset the form
-        document.getElementById('registrationForm').reset();
-
-        alert('Registration successful!');
-    });
-</script>
+<script src="/js/register.js"></script>
 </body>
 </html>
